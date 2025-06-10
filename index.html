@@ -1,16 +1,131 @@
-<html>
+<!DOCTYPE html>
+<html lang="ar">
 <head>
-<title>
-ALEMNY
-</title>
+  <meta charset="UTF-8" />
+  <title>تسجيل الطالب</title>
+  <style>
+    body {
+      margin: 0; font-family: 'Cairo', sans-serif; direction: rtl; background: #f0f2f5;
+      display: flex; justify-content: center; align-items: center; height: 100vh;
+    }
+    .container {
+      background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 350px; text-align: center;
+    }
+    h2 { color: #1877f2; margin-bottom: 20px; }
+    input, select {
+      width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;
+    }
+    a#register-btn {
+      display: inline-block; width: 100%; padding: 12px; background: #1877f2; color: #fff; border-radius: 6px;
+      font-size: 16px; text-decoration: none; cursor: pointer; user-select: none;
+    }
+    a#register-btn:hover { background: #155dc1; }
+    .link-btn {
+      display: inline-block; margin-top: 15px; background: #00b894; color: white;
+      padding: 10px 15px; border-radius: 6px; text-decoration: none;
+    }
+    .link-btn:hover { background: #019875; }
+    .error { color: red; margin-top: 10px; }
+    .success { color: green; margin-top: 10px; }
+  </style>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 </head>
 <body>
-<center>
-<h1>اهلا بك عزيزي الطالب في موقع  علمني
-</h1>
-<img src="./image/logo.png">
-<!-- <a href="file:///C:/Users/omar/Desktop/signe%20.html">التالي</a> -->
-<a href="./home.html">التالي</a>
-</center>
+  <div class="container">
+    <h2>تسجيل الطالب</h2>
+    <input type="text" id="name" placeholder="الاسم" />
+    <input type="text" id="phone" placeholder="رقم التليفون" />
+    <select id="grade">
+      <option value="">اختر الصف الدراسي</option>
+      <option value="first">أولى إعدادي</option>
+      <option value="second">ثانية إعدادي</option>
+      <option value="third">ثالثة إعدادي</option>
+    </select>
+    <a href="#" id="register-btn">تسجيل الدخول</a>
+    <div id="output"></div>
+    
+    <!-- =========== هنا يمكن إضافة روابط ثابتة =========== -->
+ 
+
+  <script>
+    // إعدادات Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqsOuXb1fSgp6uUK3U932zHf6d05kSaQ0",
+      authDomain: "alemny5.firebaseapp.com",
+      databaseURL: "https://alemny5-default-rtdb.firebaseio.com",
+      projectId: "alemny5",
+      storageBucket: "alemny5.firebasestorage.app",
+      messagingSenderId: "870584657552",
+      appId: "1:870584657552:web:e004e4ec141f37a38dda15",
+      measurementId: "G-16P4H47QYJ"
+    };
+
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    document.getElementById("register-btn").addEventListener("click", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const grade = document.getElementById("grade").value;
+      const output = document.getElementById("output");
+
+      if (!name || !phone || !grade) {
+        output.innerHTML = "<p class='error'>من فضلك اكتب اسمك ورقم تليفونك واختر الصف</p>";
+        return;
+      }
+
+      const studentsRef = database.ref("students");
+      studentsRef.orderByChild("phone").equalTo(phone).once("value", snapshot => {
+        if (snapshot.exists()) {
+          showLink(phone, grade);
+        } else {
+          const newRef = studentsRef.push();
+          newRef.set({
+            name: name,
+            phone: phone,
+            grade: grade,
+            pageContent: "دي صفحتك يا " + name
+          }).then(() => {
+            showLink(phone, grade);
+          });
+        }
+      });
+    });
+
+    // =========== هذه الدالة الرئيسية لربط الصفحات ===========
+    function showLink(phone, grade) {
+      // 1. هنا تحدد روابط الصفحات لكل صف
+      let pageLink = '';
+      switch(grade) {
+        case 'first':
+          pageLink = 'first_grade.html'; // رابط أولى إعدادي
+          break;
+        case 'second':
+          pageLink = 'second_grade.html'; // رابط ثانية إعدادي
+          break;
+        case 'third':
+          pageLink = 'home.html'; // رابط ثالثة إعدادي
+          break;
+      }
+      
+      // 2. هنا يتم إنشاء الرابط النهائي
+      const link = `${pageLink}?phone=${encodeURIComponent(phone)}`;
+      
+      // 3. هنا يتم عرض الرابط للطالب
+      output.innerHTML = `
+        <p class="success">تم إنشاء صفحتك ✅</p>
+        <a href="${link}" class="link-btn" target="_blank">اضغط هنا للدخول</a>
+      `;
+    }
+    // =========== نهاية الدالة ===========
+  </script>
 </body>
 </html>

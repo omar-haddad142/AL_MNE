@@ -1,0 +1,102 @@
+ * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 20px 60px; /* padding bottom عشان الشريط السفلي ما يغطيش المحتوى */
+    }
+
+    /* الشريط العلوي */
+    header {
+      width: 100%;
+      background-color: #004aad;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    /* محتوى المواد في منتصف الشاشة */
+    .subjects {
+      margin-top: 60px;
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .subjects a {
+      text-decoration: none;
+      font-size: 1.3rem;
+      color: #004aad;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: 2px solid #004aad;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background-color: white;
+    }
+
+    .subjects a:hover {
+      background-color: #004aad;
+      color: white;
+    }
+
+    /* الشريط السفلي */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #004aad;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      background-color: #007bff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,123,255,0.5);
+      transition: background-color 0.3s ease;
+      width: 80px;
+      user-select: none;
+    }
+
+    footer a:hover {
+      background-color: #0056b3;
+      color: #ffcc00;
+    }
+
+    footer a img {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      filter: invert(100%);
+    }
